@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
-// import { userRouter } from "./routes/user.routes";
 
 import { type Request, type Response, type NextFunction, type ErrorRequestHandler } from "express";
 
 import express from "express";
 import cors from "cors";
 import { connect } from "./db";
+import { userRouter } from "./routes/user.routes";
 
 const main = async (): Promise<void> => {
   // Database connection
@@ -39,7 +39,7 @@ const main = async (): Promise<void> => {
   });
 
   // Using the routes
-  // app.use("/user", userRouter);
+  app.use("/user", userRouter);
   app.use("/public", express.static("public"));
   app.use("/", router);
 
