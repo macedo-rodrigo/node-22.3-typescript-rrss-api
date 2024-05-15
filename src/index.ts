@@ -6,6 +6,7 @@ import express from "express";
 import cors from "cors";
 import { connect } from "./db";
 import { userRouter } from "./routes/user.routes";
+// import { postRouter } from "./routes/post.routes";
 
 const main = async (): Promise<void> => {
   // Database connection
@@ -40,6 +41,7 @@ const main = async (): Promise<void> => {
 
   // Using the routes
   app.use("/user", userRouter);
+  // app.use("/post", postRouter);
   app.use("/public", express.static("public"));
   app.use("/", router);
 

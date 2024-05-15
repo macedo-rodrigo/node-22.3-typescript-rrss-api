@@ -77,3 +77,38 @@ userRouter.post("/login", async (req: Request, res: Response, next: NextFunction
     next(error);
   }
 });
+
+userRouter.get("/name/:name", async (req: Request, res: Response, next: NextFunction) => {
+  // Extract the value of the 'name' parameter from the request URL
+  const userName = req.params.name;
+  try {
+    // Try to find a user whose first name matches the provided name (case insensitive)
+    const user = await User.find({ firstName: new RegExp("^" + userName.toLowerCase(), "i") });
+    // If user is found (i.e., the result is not empty)
+    if (user?.length) {
+      // Send the user data as a JSON response
+      res.json(user);
+    } else {
+      // If no user is found, send a 404 (Not Found) status code with an error message
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    // If an error occurs during the database operation, pass it to the error-handling middleware
+    next(error);
+  }
+});
+
+userRouter.get("/:id/posts", async (req: Request, res: Response, next: NextFunction) => {
+  const id = req.params.id;
+
+  try {
+    const user = await User.findById(id).populate(["posts"]);
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ error: "Any post was found" });
+    }
+  } catch (error) {
+    next();
+  }
+});

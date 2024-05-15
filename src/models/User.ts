@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import mongoose from "mongoose";
+import mongoose, { type ObjectId } from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
 const Schema = mongoose.Schema;
@@ -11,6 +11,7 @@ export interface IUser {
   password: string;
   birthDate: Date;
   gender: "male" | "female" | "other";
+  posts: ObjectId;
 }
 
 // Creamos el schema del usuario
@@ -60,6 +61,11 @@ const userSchema = new Schema<IUser>(
       required: true,
       enum: ["male", "female", "personalized"],
     },
+    posts: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+      required: false,
+    }
   },
   {
     timestamps: true,
