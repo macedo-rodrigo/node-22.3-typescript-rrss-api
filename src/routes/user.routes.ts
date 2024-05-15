@@ -5,6 +5,7 @@ import { generateToken } from "../utils/token";
 
 // models
 import { User } from "../models/User";
+import { Post } from "../models/Post";
 
 // users router
 export const userRouter = express.Router();
@@ -102,11 +103,12 @@ userRouter.get("/:id/posts", async (req: Request, res: Response, next: NextFunct
   const id = req.params.id;
 
   try {
-    const user = await User.findById(id).populate(["posts"]);
-    if (user) {
-      res.json(user);
+    const user = await User.findById(id);
+    const posts = await Post.find({ owner: user })
+    if (posts.length !== 0) {
+      res.status(201).json({ posts });
     } else {
-      res.status(404).json({ error: "Any post was found" });
+      res.status(404).json({ error: "It seems like this user doesn't have posts yet." })
     }
   } catch (error) {
     next();

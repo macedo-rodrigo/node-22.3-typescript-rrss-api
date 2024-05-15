@@ -11,7 +11,8 @@ export interface IUser {
   password: string;
   birthDate: Date;
   gender: "male" | "female" | "other";
-  posts: ObjectId;
+  posts: ObjectId[];
+  friends: number;
 }
 
 // Creamos el schema del usuario
@@ -61,9 +62,16 @@ const userSchema = new Schema<IUser>(
       required: true,
       enum: ["male", "female", "personalized"],
     },
-    posts: {
+    posts: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
+      required: false,
+      default: 0,
+    }
+    ],
+    friends: {
+      type: Number,
+      default: 0,
       required: false,
     }
   },
